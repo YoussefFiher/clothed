@@ -1,0 +1,18 @@
+.articles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px}
+.article-card{cursor:pointer}
+.card-thumb{aspect-ratio:4/5;overflow:hidden;position:relative;background:var(--border-sm)}
+.card-thumb img{width:100%;height:100%;object-fit:cover;transition:transform var(--t-slow)}
+.article-card:hover .card-thumb img{transform:scale(1.04)}
+.card-thumb-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:3rem;color:var(--border)}
+.card-status{position:absolute;top:10px;left:10px}
+.card-fav-btn{position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.92);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;color:var(--ghost);font-size:.875rem;transition:var(--t-base)}
+.card-fav-btn:hover{transform:scale(1.1)}
+.card-fav-btn.active{color:var(--danger)}
+.card-body{padding:14px 16px 16px}
+.card-top{margin-bottom:12px}
+.card-title{font-size:.95rem;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3}
+.card-donor{display:flex;align-items:center;gap:7px;cursor:pointer;margin-top:2px}
+.card-donor:hover .donor-name{color:var(--brand);text-decoration:underline}
+.donor-name{font-size:.8rem;color:var(--muted);font-weight:500}
+.donor-city{font-size:.75rem;color:var(--ghost);display:flex;align-items:center;gap:3px;margin-left:auto}
+.donor-city i{font-size:.65rem}

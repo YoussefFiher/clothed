@@ -1,0 +1,169 @@
+<app-acceuil-header></app-acceuil-header>
+
+<main class="page-container">
+  <div class="profile-page-layout">
+
+    <!-- Sidebar -->
+    <aside class="profile-sidebar">
+      <div class="profile-card card">
+        <div class="profile-card-top">
+          <div class="profile-av-wrap">
+            <div class="avatar avatar-xl profile-av-circle" [style.background]="avatarColor">
+              <img *ngIf="hasPhoto()" [src]="getcurrentuserpdp()" alt="Photo de profil">
+              <span *ngIf="!hasPhoto()">{{ getInitials() }}</span>
+            </div>
+            <button class="av-edit-btn" *ngIf="IsEditing" (click)="fileInput.click()" title="Changer la photo">
+              <i class="fa-solid fa-camera"></i>
+            </button>
+            <input type="file" accept="image/*" (change)="onFileSelected($event)" style="display:none" #fileInput>
+          </div>
+          <div class="profile-card-name">{{ getcurrentuserfirstname() }} {{ getcurrentuserlastname() }}</div>
+          <div class="profile-card-sub">
+            <i class="fa-solid fa-location-dot" style="color:var(--brand);font-size:.75rem"></i>
+            {{ getcurrentuserville() }}
+          </div>
+          <div class="profile-card-stats">
+            <div class="p-stat">
+              <div class="p-stat-val">{{ currentUserArticles.length }}</div>
+              <div class="p-stat-lbl">Articles</div>
+            </div>
+            <div class="p-stat-div"></div>
+            <div class="p-stat">
+              <div class="p-stat-val">{{ getLibreCount() }}</div>
+              <div class="p-stat-lbl">Disponibles</div>
+            </div>
+          </div>
+        </div>
+        <div class="profile-card-actions">
+          <button class="btn btn-secondary" style="width:100%" *ngIf="!IsEditing" (click)="toggleEditing('all')">
+            <i class="fa-solid fa-pen"></i> Modifier mon profil
+          </button>
+          <button class="btn btn-ghost" style="width:100%;color:var(--danger)" *ngIf="IsEditing" (click)="toggleEditing('all')">
+            <i class="fa-solid fa-xmark"></i> Annuler
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <div class="profile-main">
+
+      <!-- Infos personnelles -->
+      <div class="card profile-section">
+        <div class="profile-section-header">
+          <h2 class="profile-section-title">Informations personnelles</h2>
+        </div>
+
+        <form [formGroup]="userForm">
+
+          <div class="photo-success" *ngIf="profilPicture && IsEditing">
+            <i class="fa-solid fa-check-circle"></i> {{ profilPictureMessage }}
+          </div>
+
+          <div class="info-grid">
+            <div class="info-field">
+              <label class="info-field-label">Prénom</label>
+              <div class="info-field-value" *ngIf="!IsEditing">{{ getcurrentuserfirstname() }}</div>
+              <input class="form-control" *ngIf="IsEditing" formControlName="firstName" placeholder="Prénom">
+            </div>
+            <div class="info-field">
+              <label class="info-field-label">Nom</label>
+              <div class="info-field-value" *ngIf="!IsEditing">{{ getcurrentuserlastname() }}</div>
+              <input class="form-control" *ngIf="IsEditing" formControlName="lastName" placeholder="Nom">
+            </div>
+            <div class="info-field">
+              <label class="info-field-label">Ville</label>
+              <div class="info-field-value" *ngIf="!IsEditing">{{ getcurrentuserville() }}</div>
+              <input class="form-control" *ngIf="IsEditing" formControlName="city" placeholder="Ville">
+            </div>
+            <div class="info-field">
+              <label class="info-field-label">Adresse</label>
+              <div class="info-field-value" *ngIf="!IsEditing">{{ getcurrentuseraddress() }}</div>
+              <input class="form-control" *ngIf="IsEditing" formControlName="address" placeholder="Adresse">
+            </div>
+          </div>
+
+          <!-- Password section -->
+          <div class="password-section" *ngIf="IsEditing">
+            <div class="password-section-header">
+              <h3>Changer le mot de passe</h3>
+              <button type="button" class="btn btn-ghost btn-sm" *ngIf="!modify_password" (click)="modify_password_click()">
+                <i class="fa-solid fa-key"></i> Modifier
+              </button>
+            </div>
+            <ng-container *ngIf="modify_password">
+              <div class="info-grid" style="margin-top:16px">
+                <div class="info-field" style="grid-column:1/-1">
+                  <label class="info-field-label">Ancien mot de passe</label>
+                  <input class="form-control" type="password" formControlName="oldPassword" placeholder="Ancien mot de passe" (blur)="validateOldPassword()">
+                  <div class="form-error" *ngIf="modify_password && !isOldPasswordCorrect && userForm.value.oldPassword">
+                    <i class="fa-solid fa-circle-exclamation"></i> Mot de passe incorrect.
+                  </div>
+                  <div style="font-size:.78rem;color:var(--brand);margin-top:4px" *ngIf="isOldPasswordCorrect">
+                    <i class="fa-solid fa-check-circle"></i> Mot de passe correct !
+                  </div>
+                </div>
+                <div class="info-field" *ngIf="isOldPasswordCorrect">
+                  <label class="info-field-label">Nouveau mot de passe</label>
+                  <input class="form-control" type="password" formControlName="newPassword" placeholder="Nouveau mot de passe">
+                </div>
+                <div class="info-field" *ngIf="isOldPasswordCorrect">
+                  <label class="info-field-label">Confirmation</label>
+                  <input class="form-control" type="password" formControlName="confirmPassword" placeholder="Confirmer">
+                </div>
+              </div>
+            </ng-container>
+          </div>
+
+          <!-- Save -->
+          <div class="profile-save-row" *ngIf="IsEditing && validatePasswordConfirmation()">
+            <button type="button" class="btn btn-primary" (click)="saveChanges()">
+              <i class="fa-solid fa-check"></i> Enregistrer les modifications
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- Mes articles -->
+      <div class="card profile-section">
+        <div class="profile-section-header">
+          <h2 class="profile-section-title">Mes articles publiés</h2>
+          <a routerLink="/article" class="btn btn-primary btn-sm">
+            <i class="fa-solid fa-plus"></i> Ajouter
+          </a>
+        </div>
+
+        <div class="my-articles-grid" *ngIf="currentUserArticles.length > 0">
+          <div class="my-article-card" *ngFor="let article of currentUserArticles">
+            <div class="my-article-img">
+              <img *ngIf="article.images?.length" [src]="resolveImg(article.images[0])" [alt]="article.title">
+              <div class="my-article-img-placeholder" *ngIf="!article.images?.length">
+                <i class="fa-solid fa-shirt"></i>
+              </div>
+              <span [class]="'badge badge-' + article.statut" style="position:absolute;top:8px;left:8px">{{ article.statut }}</span>
+            </div>
+            <div class="my-article-body">
+              <div class="my-article-title">{{ article.title }}</div>
+              <div class="my-article-type">{{ article.type }}</div>
+            </div>
+            <button class="my-article-delete" (click)="openDeleteConfirmationDialog(article)" title="Supprimer">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="empty-state" *ngIf="currentUserArticles.length === 0">
+          <div class="empty-icon">&#128230;</div>
+          <p>Vous n'avez pas encore publié d'articles.</p>
+          <a routerLink="/article" class="btn btn-primary btn-sm">
+            <i class="fa-solid fa-plus"></i> Publier un article
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<app-footer></app-footer>

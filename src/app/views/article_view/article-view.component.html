@@ -1,0 +1,112 @@
+<app-acceuil-header></app-acceuil-header>
+
+<main class="page-container">
+  <div class="av-layout">
+
+    <div class="av-main">
+      <div class="av-heading">
+        <a routerLink="/acceuil" class="back-link">
+          <i class="fa-solid fa-arrow-left"></i> Retour
+        </a>
+        <h1 class="display-md" style="margin:14px 0 4px">Publier un article</h1>
+        <p class="body-sm">Partagez vos affaires inutilisées avec la communauté.</p>
+      </div>
+
+      <form [formGroup]="form" class="card av-card">
+
+        <!-- PHOTOS -->
+        <div class="form-group">
+          <label class="form-label">Photos <span style="color:var(--danger)">*</span></label>
+          <div class="drop-zone" *ngIf="files.length === 0" (click)="pick()">
+            <input type="file" accept="image/*" multiple (change)="onFiles($event)" #fileInput style="display:none">
+            <i class="fa-solid fa-cloud-arrow-up drop-icon"></i>
+            <span class="drop-label">Cliquez pour choisir des photos</span>
+            <span class="drop-hint">JPG, PNG, WebP &mdash; max 10 Mo</span>
+          </div>
+          <div class="thumbs-wrap" *ngIf="files.length > 0">
+            <input type="file" accept="image/*" multiple (change)="onFiles($event)" #fileInput style="display:none">
+            <div class="thumb" *ngFor="let p of previews; let i = index">
+              <img [src]="p" alt="">
+              <button type="button" class="thumb-del" (click)="remove(i)"><i class="fa-solid fa-xmark"></i></button>
+              <div class="thumb-badge" *ngIf="i === 0">Principal</div>
+            </div>
+            <div class="thumb-add" (click)="pick()">
+              <i class="fa-solid fa-plus"></i><span>Ajouter</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TITRE -->
+        <div class="form-group">
+          <label class="form-label">Titre <span style="color:var(--danger)">*</span></label>
+          <input class="form-control" formControlName="title"
+            placeholder="Ex: Manteau en laine bleue, taille L, très bon état">
+        </div>
+
+        <!-- CATÉGORIE + TYPE -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label">Catégorie <span style="color:var(--danger)">*</span></label>
+            <select class="form-control" formControlName="type" (change)="onTypeChange()">
+              <option value="" disabled>Choisir...</option>
+              <option *ngFor="let t of articleTypes" [value]="t.name">{{ t.name }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Type <span style="color:var(--danger)">*</span></label>
+            <select class="form-control" formControlName="sous_type">
+              <option value="" disabled>{{ selectedType ? 'Choisir...' : 'Sélectionnez d\'abord une catégorie' }}</option>
+              <option *ngFor="let s of selectedType?.subTypes" [value]="s">{{ s }}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div class="form-group">
+          <label class="form-label">Description <span style="color:var(--danger)">*</span></label>
+          <textarea class="form-control" formControlName="description" rows="4"
+            placeholder="État, taille, matière, conseils de lavage, défauts éventuels..."></textarea>
+        </div>
+
+        <!-- ERROR -->
+        <div class="alert alert-error" *ngIf="error">
+          <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="av-actions">
+          <a routerLink="/acceuil" class="btn btn-secondary">Annuler</a>
+          <button type="button" class="btn btn-primary"
+            (click)="submit()"
+            [disabled]="form.invalid || !files.length || uploading || submitting">
+            <span *ngIf="uploading"><i class="fa-solid fa-spinner fa-spin"></i> Upload images...</span>
+            <span *ngIf="submitting && !uploading"><i class="fa-solid fa-spinner fa-spin"></i> Publication...</span>
+            <span *ngIf="!uploading && !submitting"><i class="fa-solid fa-paper-plane"></i> Publier l'article</span>
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="av-aside">
+      <div class="card" style="padding:22px">
+        <p class="sidebar-title">💡 Conseils</p>
+        <div class="tip" *ngFor="let t of tips">
+          <div class="tip-ic"><i [class]="t.icon"></i></div>
+          <div><strong>{{ t.label }}</strong><p>{{ t.body }}</p></div>
+        </div>
+      </div>
+      <div class="card" style="padding:20px;margin-top:14px">
+        <p class="sidebar-title">Progression</p>
+        <div class="prog-item" *ngFor="let p of progress" [class.done]="p.done">
+          <i [class]="p.done ? 'fa-solid fa-circle-check' : 'fa-regular fa-circle'"></i>
+          <span>{{ p.label }}</span>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+</main>
+
+<app-footer></app-footer>

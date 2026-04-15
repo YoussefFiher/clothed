@@ -1,0 +1,188 @@
+<app-acceuil-header></app-acceuil-header>
+
+<!-- Page header with KPIs -->
+<div class="admin-hero">
+  <div class="wrap admin-hero-inner">
+    <div class="admin-hero-title">
+      <div class="admin-shield-icon"><i class="fa-solid fa-shield-halved"></i></div>
+      <div>
+        <h1 class="display-md" style="margin-bottom:3px">Administration</h1>
+        <p class="body-sm">Tableau de bord — Gestion de la plateforme Clothed</p>
+      </div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-icon users"><i class="fa-solid fa-users"></i></div>
+        <div class="kpi-body">
+          <div class="kpi-num">{{ usersnumber }}</div>
+          <div class="kpi-lbl">Utilisateurs</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon articles"><i class="fa-solid fa-shirt"></i></div>
+        <div class="kpi-body">
+          <div class="kpi-num">{{ articlesnumber }}</div>
+          <div class="kpi-lbl">Articles</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon libre"><i class="fa-solid fa-circle-check"></i></div>
+        <div class="kpi-body">
+          <div class="kpi-num">{{ getLibreCount() }}</div>
+          <div class="kpi-lbl">Disponibles</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon done"><i class="fa-solid fa-gift"></i></div>
+        <div class="kpi-body">
+          <div class="kpi-num">{{ getDoneCount() }}</div>
+          <div class="kpi-lbl">Donnés</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main class="page-container">
+
+  <!-- Toolbar -->
+  <div class="admin-toolbar">
+    <!-- Search -->
+    <div class="search-field" style="flex:1;max-width:420px">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" #searchInput
+        (input)="applySearchFilter(searchInput.value)"
+        placeholder="Rechercher...">
+    </div>
+    <!-- Tabs -->
+    <div class="admin-tabs">
+      <button class="admin-tab" [class.active]="showUsers" (click)="showUsers=true;showArticles=false">
+        <i class="fa-solid fa-users"></i> Utilisateurs
+        <span class="tab-count">{{ usersFiltered.length }}</span>
+      </button>
+      <button class="admin-tab" [class.active]="showArticles" (click)="showArticles=true;showUsers=false">
+        <i class="fa-solid fa-shirt"></i> Articles
+        <span class="tab-count">{{ articlesfiltered.length }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── USERS TABLE ── -->
+  <div class="card admin-table-card" *ngIf="showUsers">
+    <div class="table-header">
+      <h3 class="table-title">Membres inscrits</h3>
+      <span class="body-sm">{{ usersFiltered.length }} résultat(s)</span>
+    </div>
+    <div class="table-scroll">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Membre</th>
+            <th>Email</th>
+            <th>Ville</th>
+            <th>Adresse</th>
+            <th style="text-align:right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of usersFiltered" (click)="navigateToDonateurProfile(user.id)">
+            <td>
+              <div class="table-user-cell">
+                <div class="avatar avatar-sm" [style.background]="avatarColor(user.id)">
+                  {{ user.firstName[0] }}{{ user.lastName[0] }}
+                </div>
+                <div>
+                  <div style="font-weight:600;font-size:.875rem">{{ user.firstName }} {{ user.lastName }}</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="table-email">{{ user.email }}</span></td>
+            <td><span class="table-tag">{{ user.city }}</span></td>
+            <td class="body-sm" style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ user.address }}</td>
+            <td>
+              <div class="table-actions">
+                <button class="tbl-btn ghost" title="Voir profil" (click)="$event.stopPropagation(); navigateToDonateurProfile(user.id)">
+                  <i class="fa-regular fa-user"></i>
+                </button>
+                <button class="tbl-btn danger" title="Bloquer" (click)="$event.stopPropagation(); openDeleteConfirmationDialog(user)">
+                  <i class="fa-solid fa-ban"></i> Bloquer
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="usersFiltered.length === 0">
+            <td colspan="5" class="table-empty">
+              <i class="fa-solid fa-magnifying-glass"></i> Aucun utilisateur trouvé.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── ARTICLES TABLE ── -->
+  <div class="card admin-table-card" *ngIf="showArticles">
+    <div class="table-header">
+      <h3 class="table-title">Articles publiés</h3>
+      <span class="body-sm">{{ articlesfiltered.length }} résultat(s)</span>
+    </div>
+    <div class="table-scroll">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Article</th>
+            <th>Donateur</th>
+            <th>Catégorie</th>
+            <th>Statut</th>
+            <th style="text-align:right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let article of articlesfiltered" (click)="navigateToArticle(article.id)">
+            <td>
+              <div class="table-article-cell">
+                <div class="table-art-thumb">
+                  <img *ngIf="GetFirstImageUrl(article)" [src]="GetFirstImageUrl(article)!" alt="" loading="lazy">
+                  <i *ngIf="!article.images?.length" class="fa-solid fa-shirt"></i>
+                </div>
+                <div>
+                  <div style="font-weight:600;font-size:.875rem;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ article.title }}</div>
+                  <div class="body-sm">{{ article.sous_type }}</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="table-user-cell" style="gap:8px">
+                <div class="avatar avatar-xs" [style.background]="avatarColor(article.user.id)">
+                  {{ article.user.firstName[0] }}{{ article.user.lastName[0] }}
+                </div>
+                <span style="font-size:.85rem">{{ article.user.firstName }}</span>
+              </div>
+            </td>
+            <td><span class="table-tag">{{ article.type }}</span></td>
+            <td><span [class]="'badge badge-' + article.statut">{{ article.statut }}</span></td>
+            <td>
+              <div class="table-actions">
+                <button class="tbl-btn ghost" title="Voir article" (click)="$event.stopPropagation(); navigateToArticle(article.id)">
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </button>
+                <button class="tbl-btn danger" title="Supprimer" (click)="$event.stopPropagation(); openDeleteConfirmationDialogarticle(article)">
+                  <i class="fa-solid fa-trash"></i> Supprimer
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="articlesfiltered.length === 0">
+            <td colspan="5" class="table-empty">
+              <i class="fa-solid fa-magnifying-glass"></i> Aucun article trouvé.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<app-footer></app-footer>

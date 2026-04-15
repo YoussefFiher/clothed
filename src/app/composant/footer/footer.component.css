@@ -1,0 +1,13 @@
+.site-footer{background:#111827;color:rgba(255,255,255,.6);margin-top:80px}
+.site-footer-inner{padding:56px 24px 32px}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+.footer-brand p{font-size:.85rem;line-height:1.7;margin-top:12px;max-width:240px}
+.footer-logo{display:flex;align-items:center;gap:8px;font-family:var(--font-serif);font-size:1.3rem;color:#fff;margin-bottom:2px}
+.footer-links-group h4{font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:14px}
+.footer-links-group ul{display:flex;flex-direction:column;gap:9px}
+.footer-links-group a{font-size:.85rem;transition:var(--t-base)}
+.footer-links-group a:hover{color:#fff}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:24px;display:flex;justify-content:space-between;font-size:.8rem}
+.footer-bottom span:first-child{color:rgba(255,255,255,.5)}
+@media(max-width:900px){.footer-top{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.footer-top{grid-template-columns:1fr}}

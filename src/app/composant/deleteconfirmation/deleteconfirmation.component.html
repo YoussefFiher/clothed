@@ -1,0 +1,24 @@
+<div class="dialog-container">
+  <div class="dialog-icon danger">
+    <i class="fa-solid fa-triangle-exclamation"></i>
+  </div>
+  <h2 class="dialog-title">Confirmer la suppression</h2>
+  <p class="dialog-body">
+    Êtes-vous sûr de vouloir supprimer
+    <strong *ngIf="data?.article?.title">"{{ data.article.title }}"</strong>
+    <span *ngIf="!data?.article?.title">cet élément</span> ?
+    Cette action est irréversible.
+  </p>
+  <div class="success-msg" *ngIf="data?.deleteSuccess">
+    <i class="fa-solid fa-check-circle"></i>
+    Supprimé avec succès !
+  </div>
+  <div class="dialog-actions">
+    <button class="btn btn-secondary" (click)="onCancelClick()">
+      <i class="fa-solid fa-xmark"></i> Annuler
+    </button>
+    <button class="btn btn-danger" (click)="onConfirmClick()">
+      <i class="fa-solid fa-trash"></i> Supprimer
+    </button>
+  </div>
+</div>

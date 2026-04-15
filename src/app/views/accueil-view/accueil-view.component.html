@@ -1,0 +1,73 @@
+<app-acceuil-header></app-acceuil-header>
+
+<!-- Toast notification -->
+<div class="toast-bar" [class.visible]="toast">{{ toast }}</div>
+
+<!-- Page header -->
+<div class="page-hero">
+  <div class="wrap page-hero-inner">
+    <div>
+      <h1 class="display-md" style="margin-bottom:3px">Découvrir</h1>
+      <p class="body-sm">{{ filtered.length }} article(s) disponible(s)</p>
+    </div>
+    <div class="search-field">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" [(ngModel)]="searchTerm" (input)="applyFilters()" placeholder="Rechercher un article...">
+      <button *ngIf="searchTerm" (click)="clearSearch()" class="clear-btn"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+  </div>
+</div>
+
+<!-- Category tabs -->
+<div class="cat-bar">
+  <div class="wrap cat-inner">
+    <button class="cat-pill" [class.active]="!activeType" (click)="setType('')">Tout</button>
+    <div class="cat-group" *ngFor="let cat of categories">
+      <button class="cat-pill" [class.active]="activeType === cat.name" (click)="setType(cat.name)">
+        {{ cat.label }}
+      </button>
+      <div class="cat-sub-menu" *ngIf="cat.subs">
+        <button *ngFor="let sub of cat.subs" (click)="setSub(sub)">{{ sub }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Active filter chip -->
+<div class="wrap" style="padding-top:16px" *ngIf="activeSub">
+  <span class="filter-chip">
+    {{ activeSub }}
+    <button (click)="setSub('')"><i class="fa-solid fa-xmark"></i></button>
+  </span>
+</div>
+
+<!-- Loading -->
+<div class="page-container" *ngIf="loading">
+  <div class="empty-state"><div class="loading-spinner"></div><p>Chargement...</p></div>
+</div>
+
+<!-- Content -->
+<main class="page-container" *ngIf="!loading">
+  <app-articles [articles]="filtered"></app-articles>
+
+  <div class="empty-state" *ngIf="filtered.length === 0 && !noArticle">
+    <div class="empty-icon">🔍</div>
+    <p>Aucun article ne correspond à votre recherche.</p>
+    <button class="btn btn-secondary" (click)="resetFilters()">Réinitialiser les filtres</button>
+  </div>
+
+  <div class="empty-state" *ngIf="noArticle">
+    <div class="empty-icon">🌱</div>
+    <p>Aucun article pour l'instant. Soyez le premier à donner !</p>
+    <a routerLink="/article" class="btn btn-primary">
+      <i class="fa-solid fa-plus"></i> Publier un article
+    </a>
+  </div>
+</main>
+
+<!-- FAB -->
+<a routerLink="/article" class="fab-btn" title="Donner un article">
+  <i class="fa-solid fa-plus"></i>
+</a>
+
+<app-footer></app-footer>

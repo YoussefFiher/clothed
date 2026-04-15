@@ -1,0 +1,34 @@
+<div class="articles-grid">
+  <article class="article-card card card-hover" *ngFor="let article of articles" (click)="go(article.id)">
+    <div class="card-thumb">
+      <img *ngIf="resolveImg(article.images[0])" [src]="resolveImg(article.images[0])!" [alt]="article.title" loading="lazy">
+      <div class="card-thumb-placeholder" *ngIf="!resolveImg(article.images[0])">
+        <i class="fa-solid fa-shirt"></i>
+      </div>
+      <div class="card-status">
+        <span [class]="'badge badge-' + article.statut">{{ statusLabel(article.statut) }}</span>
+      </div>
+      <button class="card-fav-btn" [class.active]="isFav(article)"
+        (click)="$event.stopPropagation(); toggleFav(article)">
+        <i [class]="isFav(article) ? 'fa-solid fa-heart' : 'fa-regular fa-heart'"></i>
+      </button>
+    </div>
+    <div class="card-body">
+      <div class="label-xs" style="margin-bottom:4px">
+        {{ article.type }}<span *ngIf="article.sous_type"> &middot; {{ article.sous_type }}</span>
+      </div>
+      <h3 class="card-title">{{ article.title }}</h3>
+      <div class="card-footer-row">
+        <div class="card-donor" (click)="$event.stopPropagation(); goProfile(article.user.id)">
+          <div class="avatar avatar-xs" [style.background]="avatarColor(article.user.id)">
+            {{ article.user.firstName[0] }}{{ article.user.lastName[0] }}
+          </div>
+          <span>{{ article.user.firstName }}</span>
+        </div>
+        <span class="card-city">
+          <i class="fa-solid fa-location-dot"></i> {{ article.user.city }}
+        </span>
+      </div>
+    </div>
+  </article>
+</div>

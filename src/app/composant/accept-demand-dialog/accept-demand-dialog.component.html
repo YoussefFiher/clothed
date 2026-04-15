@@ -1,0 +1,28 @@
+<div class="dialog-container">
+  <div class="dialog-icon success">
+    <i class="fa-solid fa-gift"></i>
+  </div>
+  <h2 class="dialog-title">Accepter la donation</h2>
+  <p class="dialog-body">Organisez la remise de l'article avec le demandeur.</p>
+  <form [formGroup]="AcceptForm">
+    <div class="form-group">
+      <label class="form-label">Mode de livraison</label>
+      <select class="form-control" formControlName="delivery">
+        <option value="bpost">📦 Bpost</option>
+        <option value="dhl">🚚 DHL Express</option>
+        <option value="retrait">🤝 Retrait en main propre</option>
+        <option value="autres">📬 Autre transporteur</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Date prévue de remise</label>
+      <input class="form-control" type="date" formControlName="Date" [min]="today">
+    </div>
+    <div class="dialog-actions">
+      <button class="btn btn-secondary" type="button" (click)="onCancel()">Annuler</button>
+      <button class="btn btn-primary" type="button" (click)="onSubmit()" [disabled]="AcceptForm.invalid">
+        <i class="fa-solid fa-check"></i> Confirmer
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,35 @@
+# ── Node / npm ─────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ── Angular ────────────────────────────────────
+dist/
+.angular/
+.sass-cache/
+*.js.map
+
+# ── Backend ────────────────────────────────────
+backend/uploads/
+backend/built/
+
+# ── Base de données ────────────────────────────
+backend/config/config.json
+
+# ── Environnement ──────────────────────────────
+.env
+.env.local
+.env.production
+
+# ── Éditeurs ───────────────────────────────────
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ── Logs ───────────────────────────────────────
+logs/
+*.log

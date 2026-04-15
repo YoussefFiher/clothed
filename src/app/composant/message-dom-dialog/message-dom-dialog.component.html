@@ -1,0 +1,128 @@
+<div class="dom-dlg">
+  <div class="dom-dlg-bar" [class.asbl]="data.requestType === 'asbl'"></div>
+  <button class="dom-dlg-close" (click)="onCancelClick()">
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+
+  <div class="dom-dlg-hero">
+    <div class="dom-dlg-hero-icon">
+      <i *ngIf="data.requestType !== 'asbl'" class="fa-solid fa-box-open"></i>
+      <i *ngIf="data.requestType === 'asbl'" class="fa-solid fa-building-ngo"></i>
+    </div>
+    <div>
+      <h2 class="dom-dlg-title" *ngIf="data.requestType !== 'asbl'">Demande &agrave; domicile</h2>
+      <h2 class="dom-dlg-title" *ngIf="data.requestType === 'asbl'">Demande via ASBL</h2>
+      <p class="dom-dlg-sub" *ngIf="data.requestType !== 'asbl'">Recevez l&apos;article directement chez vous</p>
+      <p class="dom-dlg-sub" *ngIf="data.requestType === 'asbl'">Pour recevoir l&apos;article au nom de votre association</p>
+    </div>
+  </div>
+
+  <div class="dom-art-chip" *ngIf="data.articleTitle">
+    <div class="dom-art-img" *ngIf="data.articleImage">
+      <img [src]="data.articleImage" alt="">
+    </div>
+    <div class="dom-art-img placeholder" *ngIf="!data.articleImage">
+      <i class="fa-solid fa-shirt"></i>
+    </div>
+    <div class="dom-art-info">
+      <div class="dom-art-name">{{ data.articleTitle }}</div>
+      <div class="dom-art-donor">par {{ data.receiverName }}</div>
+    </div>
+    <div class="dom-art-badge">
+      <i class="fa-solid fa-check-circle"></i> Disponible
+    </div>
+  </div>
+
+  <div class="dom-steps" *ngIf="!sent">
+    <div class="dom-step active">
+      <div class="dom-step-dot"><i class="fa-solid fa-user"></i></div>
+      <span>Vos infos</span>
+    </div>
+    <div class="dom-step-line"></div>
+    <div class="dom-step" [class.active]="data.requestType === 'asbl'">
+      <div class="dom-step-dot"><i class="fa-solid fa-location-dot"></i></div>
+      <span *ngIf="data.requestType !== 'asbl'">Adresse</span>
+      <span *ngIf="data.requestType === 'asbl'">ASBL</span>
+    </div>
+    <div class="dom-step-line"></div>
+    <div class="dom-step">
+      <div class="dom-step-dot"><i class="fa-solid fa-paper-plane"></i></div>
+      <span>Envoi</span>
+    </div>
+  </div>
+
+  <form [formGroup]="requestForm" (ngSubmit)="onSendMessage()" *ngIf="!sent" class="dom-dlg-form">
+    <div class="dom-form-section">
+      <div class="dom-section-label">
+        <i class="fa-solid fa-user"></i> Vos coordonn&eacute;es
+      </div>
+      <div class="dom-row-2">
+        <div class="form-group">
+          <label class="form-label">Pr&eacute;nom *</label>
+          <input class="form-control" type="text" formControlName="firstName" placeholder="Jean">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nom *</label>
+          <input class="form-control" type="text" formControlName="lastName" placeholder="Dupont">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Adresse de livraison *</label>
+        <div class="input-group">
+          <i class="input-icon fa-solid fa-location-dot"></i>
+          <input class="form-control" type="text" formControlName="address" placeholder="Rue, num&eacute;ro, ville">
+        </div>
+      </div>
+    </div>
+
+    <ng-container *ngIf="data.requestType === 'asbl'">
+      <div class="dom-form-section">
+        <div class="dom-section-label">
+          <i class="fa-solid fa-building-ngo"></i> Informations de l&apos;ASBL
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nom de l&apos;ASBL *</label>
+          <input class="form-control" type="text" formControlName="asblName" placeholder="Ex: Croix-Rouge Belgique">
+        </div>
+        <div class="dom-row-2">
+          <div class="form-group">
+            <label class="form-label">Ville *</label>
+            <input class="form-control" type="text" formControlName="asblCity" placeholder="Bruxelles">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Adresse *</label>
+            <input class="form-control" type="text" formControlName="asblAddress" placeholder="Rue...">
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="dom-notice">
+      <i class="fa-solid fa-circle-info"></i>
+      <span>Le donateur recevra vos coordonn&eacute;es et organisera la livraison avec vous.</span>
+    </div>
+
+    <div class="dom-dlg-actions">
+      <button type="button" class="btn btn-secondary" (click)="onCancelClick()">Annuler</button>
+      <button type="submit" class="btn btn-primary" [disabled]="requestForm.invalid">
+        <i class="fa-solid fa-paper-plane"></i> Envoyer la demande
+      </button>
+    </div>
+  </form>
+
+  <div class="dom-success" *ngIf="sent">
+    <div class="dom-success-anim">
+      <div class="dom-success-circle"><i class="fa-solid fa-check"></i></div>
+    </div>
+    <h3 class="dom-success-title">Demande envoy&eacute;e !</h3>
+    <p class="dom-success-body">
+      {{ data.receiverName }} a &eacute;t&eacute; notifi&eacute;(e).<br>
+      Il/Elle vous contactera prochainement.
+    </p>
+    <div class="dom-success-chips">
+      <span class="dom-chip"><i class="fa-solid fa-clock"></i> R&eacute;ponse sous 24-48h</span>
+      <span class="dom-chip"><i class="fa-solid fa-shield-halved"></i> &Eacute;change s&eacute;curis&eacute;</span>
+    </div>
+    <button class="btn btn-primary" style="margin-top:20px;width:100%" (click)="onCancelClick()">Fermer</button>
+  </div>
+</div>

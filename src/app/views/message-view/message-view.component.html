@@ -1,0 +1,171 @@
+<app-acceuil-header></app-acceuil-header>
+
+<div class="inbox-layout">
+
+  <!-- ─── SIDEBAR ─────────────────────────────────── -->
+  <aside class="inbox-sidebar">
+    <div class="inbox-sidebar-top">
+      <div class="inbox-sidebar-header">
+        <h2>Messages</h2>
+        <span class="inbox-total-badge" *ngIf="totalUnread > 0">{{ totalUnread }} non lu(s)</span>
+      </div>
+      <div class="inbox-search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" [(ngModel)]="searchQ" placeholder="Rechercher une conversation...">
+      </div>
+    </div>
+
+    <div class="inbox-conv-list">
+      <!-- Empty -->
+      <div class="inbox-empty" *ngIf="conversations.length === 0">
+        <i class="fa-regular fa-comment-dots"></i>
+        <p>Aucune conversation</p>
+        <a routerLink="/acceuil" class="btn btn-primary btn-sm">Explorer les articles</a>
+      </div>
+
+      <!-- Conversations -->
+      <div class="inbox-conv-item"
+        *ngFor="let conv of filtered()"
+        [class.active]="active?.senderId === conv.senderId"
+        (click)="select(conv)">
+
+        <div class="inbox-conv-av avatar avatar-md" [style.background]="color(conv.senderId)">
+          <img *ngIf="pdp(conv.senderId)" [src]="pdp(conv.senderId)" alt="">
+          <span *ngIf="!pdp(conv.senderId)">{{ initials(conv.senderId) }}</span>
+        </div>
+
+        <div class="inbox-conv-body">
+          <div class="inbox-conv-row1">
+            <span class="inbox-conv-name">{{ name(conv.senderId) }}</span>
+            <span class="inbox-conv-time">{{ conv.last.createdAt | date:'dd/MM, HH:mm' }}</span>
+          </div>
+          <div class="inbox-conv-row2">
+            <span class="inbox-conv-prev">{{ clean(conv.last.content) }}</span>
+            <span class="inbox-unread-dot" *ngIf="conv.unread > 0">{{ conv.unread }}</span>
+          </div>
+          <div class="inbox-article-tag" *ngIf="conv.last.article">
+            <i class="fa-solid fa-shirt"></i> {{ conv.last.article.title }}
+            <span [class]="'badge badge-' + conv.last.article.statut" style="font-size:.65rem">{{ conv.last.article.statut }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ─── CHAT ─────────────────────────────────────── -->
+  <section class="inbox-chat">
+
+    <!-- Welcome -->
+    <div class="inbox-welcome" *ngIf="!active">
+      <div class="welcome-illo">
+        <i class="fa-regular fa-comment-dots"></i>
+      </div>
+      <h3>Vos messages</h3>
+      <p>Sélectionnez une conversation pour commencer à échanger.</p>
+    </div>
+
+    <!-- Active conv -->
+    <ng-container *ngIf="active">
+
+      <!-- Chat header -->
+      <div class="chat-topbar">
+        <div class="avatar avatar-md" [style.background]="color(active.senderId)">
+          <img *ngIf="pdp(active.senderId)" [src]="pdp(active.senderId)" alt="">
+          <span *ngIf="!pdp(active.senderId)">{{ initials(active.senderId) }}</span>
+        </div>
+        <div class="chat-topbar-info">
+          <div class="chat-topbar-name">{{ name(active.senderId) }}</div>
+          <div class="chat-topbar-sub" *ngIf="active.last.article">
+            <i class="fa-solid fa-shirt" style="color:var(--brand)"></i>
+            Re: {{ active.last.article.title }}
+          </div>
+        </div>
+        <div class="chat-topbar-actions">
+          <button class="topbar-btn" title="Profil" (click)="goProfile(active.senderId)">
+            <i class="fa-regular fa-user"></i>
+          </button>
+          <button class="topbar-btn" title="Voir l'article" *ngIf="active.last.article" (click)="goArticle(active.last.article.id)">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          </button>
+          <button class="topbar-btn accept-btn" title="Accepter le don"
+            *ngIf="isOwner() && active.last.article?.statut === 'libre'"
+            (click)="openAccept()">
+            <i class="fa-solid fa-check"></i> Accepter le don
+          </button>
+        </div>
+      </div>
+
+      <!-- Article context bar -->
+      <div class="article-ctx-bar" *ngIf="active.last.article">
+        <div class="article-ctx-icon"><i class="fa-solid fa-shirt"></i></div>
+        <div class="article-ctx-text">
+          <div class="article-ctx-title">{{ active.last.article.title }}</div>
+          <div class="article-ctx-type">{{ active.last.article.type }}</div>
+        </div>
+        <span [class]="'badge badge-' + active.last.article.statut">{{ statusLabel(active.last.article.statut) }}</span>
+      </div>
+
+      <!-- Messages -->
+      <div class="chat-messages" #msgs>
+        <ng-container *ngFor="let group of grouped()">
+          <div class="chat-date-sep">
+            <span>{{ group.date }}</span>
+          </div>
+          <ng-container *ngFor="let m of group.messages; let i = index; let last = last">
+            <!-- Received -->
+            <div class="msg-block received" *ngIf="m.senderId !== uid">
+              <div class="msg-av avatar avatar-xs" [style.background]="color(m.senderId)">{{ initials(m.senderId) }}</div>
+              <div class="msg-col">
+                <div class="bubble received">{{ clean(m.content) }}</div>
+                <div class="msg-time">{{ m.createdAt | date:'HH:mm' }}</div>
+              </div>
+            </div>
+            <!-- Sent -->
+            <div class="msg-block sent" *ngIf="m.senderId === uid">
+              <div class="msg-col">
+                <div class="bubble sent">{{ clean(m.content) }}</div>
+                <div class="msg-time sent">
+                  {{ m.createdAt | date:'HH:mm' }}
+                  <i class="fa-solid fa-check-double" style="color:var(--brand);font-size:.65rem"></i>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+
+        <!-- Typing indicator -->
+        <div class="typing-row" *ngIf="typing">
+          <div class="avatar avatar-xs" [style.background]="color(active.senderId)">{{ initials(active.senderId) }}</div>
+          <div class="typing-dots"><span></span><span></span><span></span></div>
+        </div>
+      </div>
+
+      <!-- Composer -->
+      <div class="chat-composer">
+        <!-- Emoji picker -->
+        <div class="emoji-panel" *ngIf="showEmoji">
+          <span *ngFor="let e of EMOJIS" (click)="addEmoji(e)" title="{{e}}">{{ e }}</span>
+        </div>
+
+        <div class="composer-box">
+          <button class="composer-action" (click)="showEmoji = !showEmoji" [class.active]="showEmoji" title="Emoji">
+            <i class="fa-regular fa-face-smile"></i>
+          </button>
+          <textarea class="composer-input" [(ngModel)]="draft"
+            (input)="onDraftInput()"
+            (keydown)="onKey($event)"
+            placeholder="Écrivez votre message…"
+            #draftEl
+            rows="1"></textarea>
+          <button class="composer-send" [disabled]="!draft.trim()" (click)="send()">
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </div>
+        <div class="composer-hint">
+          <kbd>Entrée</kbd> pour envoyer · <kbd>Maj+Entrée</kbd> pour un saut de ligne
+        </div>
+      </div>
+    </ng-container>
+
+  </section>
+</div>

@@ -1,0 +1,80 @@
+/* ── Page ──────────────────────────────────────── */
+.profil-page { background: var(--paper); min-height: 100vh; }
+
+/* ── Hero ──────────────────────────────────────── */
+.profil-hero    { position: relative; }
+.profil-hero-bg {
+  height: 200px;
+  background: linear-gradient(135deg, #052e16 0%, #14532d 40%, #16a34a 75%, #4ade80 100%);
+  position: relative; overflow: hidden;
+}
+.hero-pattern {
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.profil-hero-inner {
+  display: flex; align-items: flex-end; gap: 20px;
+  padding: 0 24px 32px; flex-wrap: wrap;
+  margin-top: -52px; position: relative;
+}
+.profil-av-ring { position: relative; flex-shrink: 0; }
+.profil-av {
+  width: 96px; height: 96px; font-size: 2rem; font-weight: 700; color: #fff;
+  border: 4px solid #fff; border-radius: 50%;
+  box-shadow: 0 4px 14px rgba(0,0,0,.18);
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.profil-av img { width: 100%; height: 100%; object-fit: cover; }
+.profil-verified-dot {
+  position: absolute; bottom: 2px; right: 2px;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--brand); border: 3px solid #fff;
+  display: flex; align-items: center; justify-content: center;
+}
+.profil-verified-dot i { color: #fff; font-size: .52rem; }
+
+.profil-hero-info { flex: 1; padding-bottom: 6px; min-width: 200px; }
+.profil-name {
+  font-family: var(--font-serif); font-size: 1.65rem; font-weight: 300;
+  color: var(--ink); margin-bottom: 4px; line-height: 1.2;
+}
+.profil-location { font-size: .84rem; color: var(--muted); display: flex; align-items: center; gap: 5px; margin-bottom: 10px; }
+.profil-location i { color: var(--brand); font-size: .75rem; }
+.profil-badges  { display: flex; gap: 7px; flex-wrap: wrap; }
+.profil-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 11px; border-radius: 50px; font-size: .71rem; font-weight: 500;
+  background: var(--brand-xs); color: var(--brand-md); border: 1px solid var(--brand-lt);
+}
+.profil-badge i { font-size: .62rem; }
+
+.profil-stats-card {
+  display: flex; align-items: center; gap: 20px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r-xl); padding: 14px 22px;
+  box-shadow: var(--shadow-sm); flex-shrink: 0;
+}
+.profil-stat { text-align: center; }
+.profil-stat-val {
+  font-family: var(--font-serif); font-size: 1.5rem; font-weight: 300;
+  color: var(--brand); line-height: 1;
+}
+.profil-stat-lbl {
+  font-size: .67rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: .06em; color: var(--muted); margin-top: 3px;
+}
+.profil-stat-div { width: 1px; height: 28px; background: var(--border); }
+
+/* ── Body ──────────────────────────────────────── */
+.profil-body { padding: 28px 24px 64px; max-width: 1280px; margin: 0 auto; }
+.profil-section-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.profil-section-title {
+  font-family: var(--font-serif); font-size: 1.1rem; font-weight: 400; color: var(--ink);
+}
+
+@media(max-width:768px) {
+  .profil-hero-inner { flex-direction: column; align-items: flex-start; margin-top: -64px; }
+  .profil-stats-card { width: 100%; justify-content: space-around; }
+}

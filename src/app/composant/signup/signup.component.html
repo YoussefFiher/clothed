@@ -1,0 +1,106 @@
+<div class="auth-page">
+
+  <!-- Panneau visuel gauche -->
+  <div class="auth-visual">
+    <a class="auth-brand" routerLink="/">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="32" height="32" rx="8" fill="#16a34a"/>
+  <path d="M16 7C16 7 13 8.5 10 8.5V13C10 17.5 12.5 21 16 23C19.5 21 22 17.5 22 13V8.5C19 8.5 16 7 16 7Z" fill="white" opacity="0.9"/>
+  <path d="M13.5 11L16 13.5L18.5 11" stroke="#16a34a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="16" cy="16" r="2" fill="#16a34a"/>
+</svg>
+      Clothed
+    </a>
+    <div class="auth-visual-body">
+      <h2 class="auth-visual-title">Rejoignez la communauté Clothed</h2>
+      <p class="auth-visual-sub">Inscription gratuite, pas de carte bancaire requise.</p>
+      <div class="auth-pills">
+        <div class="auth-pill"><i class="fa-solid fa-check"></i> 100% gratuit</div>
+        <div class="auth-pill"><i class="fa-solid fa-check"></i> Communauté solidaire</div>
+        <div class="auth-pill"><i class="fa-solid fa-check"></i> Messagerie intégrée</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulaire droite -->
+  <div class="auth-form-side">
+    <div class="auth-form-box">
+      <h1 class="auth-form-title">Créer un compte</h1>
+      <p class="auth-form-sub">Remplissez les informations ci-dessous.</p>
+
+      <form [formGroup]="signUpForm" (ngSubmit)="onSubmitSignup()">
+
+        <!-- Photo de profil -->
+        <div class="form-group">
+          <label class="form-label">Photo de profil <span style="color:var(--muted)">(optionnelle)</span></label>
+          <div class="photo-drop" (click)="fileInput.click()">
+            <input type="file" accept="image/*" (change)="onFileSelected($event)" style="display:none" #fileInput>
+            <i [class]="profilPicture ? 'fa-solid fa-check-circle' : 'fa-solid fa-camera'"
+               [style.color]="profilPicture ? 'var(--brand)' : 'var(--ghost)'"></i>
+            <span>{{ profilPicture ? 'Photo ajoutée ✓' : 'Ajouter une photo' }}</span>
+          </div>
+        </div>
+
+        <!-- Prénom + Nom -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label">Prénom *</label>
+            <input class="form-control" type="text" formControlName="firstname" placeholder="Jean">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nom *</label>
+            <input class="form-control" type="text" formControlName="lastname" placeholder="Dupont">
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label class="form-label">Adresse e-mail *</label>
+          <input class="form-control" type="email" formControlName="email" placeholder="jean.dupont@email.com">
+          <div class="form-error" *ngIf="emailExists">
+            <i class="fa-solid fa-circle-exclamation"></i> Cette adresse e-mail est déjà utilisée.
+          </div>
+        </div>
+
+        <!-- Mot de passe + Confirmation -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label">Mot de passe *</label>
+            <input class="form-control" type="password" formControlName="password" placeholder="Min. 8 caractères">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Confirmation *</label>
+            <input class="form-control" type="password" formControlName="passwordConfirmation" placeholder="Retaper">
+          </div>
+        </div>
+        <div class="form-error" *ngIf="signUpForm.hasError('mismatchedPassword')">
+          <i class="fa-solid fa-circle-exclamation"></i> Les mots de passe ne correspondent pas.
+        </div>
+
+        <!-- Ville + Adresse -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label">Ville *</label>
+            <input class="form-control" type="text" formControlName="ville" placeholder="Bruxelles">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Adresse *</label>
+            <input class="form-control" type="text" formControlName="address" placeholder="Rue et numéro">
+          </div>
+        </div>
+
+        <!-- Bouton -->
+        <button type="submit" class="auth-submit-btn"
+          [disabled]="signUpForm.invalid || emailExists">
+          <i class="fa-solid fa-user-plus"></i> Créer mon compte
+        </button>
+
+      </form>
+
+      <p class="auth-footer-link">
+        Déjà inscrit ? <a routerLink="/connexion">Se connecter</a>
+      </p>
+    </div>
+  </div>
+
+</div>

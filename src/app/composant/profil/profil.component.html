@@ -1,0 +1,97 @@
+<app-acceuil-header></app-acceuil-header>
+
+<div class="profil-page">
+
+  <!-- ── HERO BANNER ──────────────────────────────── -->
+  <div class="profil-hero">
+    <div class="profil-hero-bg">
+      <div class="hero-pattern"></div>
+    </div>
+
+    <div class="wrap profil-hero-inner">
+      <!-- Avatar -->
+      <div class="profil-av-ring">
+        <div class="avatar profil-av" [style.background]="avatarColor">
+          <img *ngIf="userPdp && userPdp !== 'photo introuvable'" [src]="userPdp" [alt]="userName">
+          <span *ngIf="!userPdp || userPdp === 'photo introuvable'">{{ userName[0] || '?' }}</span>
+        </div>
+        <div class="profil-verified-dot"><i class="fa-solid fa-check"></i></div>
+      </div>
+
+      <!-- Info -->
+      <div class="profil-hero-info">
+        <h1 class="profil-name">{{ userName }}</h1>
+        <div class="profil-location" *ngIf="userVille && userVille !== 'ville introuvable'">
+          <i class="fa-solid fa-location-dot"></i> {{ userVille }}
+        </div>
+        <div class="profil-badges">
+          <span class="profil-badge"><i class="fa-solid fa-leaf"></i> Donateur actif</span>
+          <span class="profil-badge"><i class="fa-solid fa-shield-halved"></i> Membre vérifié</span>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="profil-stats-card">
+        <div class="profil-stat">
+          <div class="profil-stat-val">{{ nbarticles }}</div>
+          <div class="profil-stat-lbl">Publiés</div>
+        </div>
+        <div class="profil-stat-div"></div>
+        <div class="profil-stat">
+          <div class="profil-stat-val">{{ userArticles.length }}</div>
+          <div class="profil-stat-lbl">Disponibles</div>
+        </div>
+        <div class="profil-stat-div"></div>
+        <div class="profil-stat">
+          <div class="profil-stat-val">{{ getFavoriteCount() }}</div>
+          <div class="profil-stat-lbl">Favoris</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ARTICLES ─────────────────────────────────── -->
+  <div class="wrap profil-body">
+    <div class="profil-section-hdr">
+      <h2 class="profil-section-title">Articles publiés</h2>
+      <span class="body-sm">{{ userArticles.length }} article(s)</span>
+    </div>
+
+    <div class="articles-grid" *ngIf="userArticles.length > 0">
+      <article class="article-card card card-hover"
+        *ngFor="let article of userArticles"
+        [routerLink]="['/article', article.id]">
+        <div class="card-thumb">
+          <img *ngIf="article.images?.length" [src]="GetFirstImageUrl(article)" [alt]="article.title" loading="lazy">
+          <div class="card-thumb-placeholder" *ngIf="!article.images?.length">
+            <i class="fa-solid fa-shirt"></i>
+          </div>
+          <div class="card-status">
+            <span [class]="'badge badge-' + article.statut">{{ statusLabel(article.statut) }}</span>
+          </div>
+          <button class="card-fav-btn" [class.active]="isFavorite(article)"
+            (click)="$event.stopPropagation(); onHeartClick(article)">
+            <i [class]="isFavorite(article) ? 'fa-solid fa-heart' : 'fa-regular fa-heart'"></i>
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="label-xs" style="margin-bottom:4px">
+            {{ article.type }}<span *ngIf="article.sous_type"> &middot; {{ article.sous_type }}</span>
+          </div>
+          <h3 class="card-title">{{ article.title }}</h3>
+        </div>
+      </article>
+    </div>
+
+    <div class="empty-state" *ngIf="userArticles.length === 0">
+      <div class="empty-icon">📭</div>
+      <p>Cet utilisateur n'a pas encore publié d'articles.</p>
+      <a routerLink="/acceuil" class="btn btn-secondary btn-sm">
+        <i class="fa-solid fa-arrow-left"></i> Explorer les articles
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<app-footer></app-footer>

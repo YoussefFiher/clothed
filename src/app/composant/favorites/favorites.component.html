@@ -1,0 +1,66 @@
+<app-acceuil-header></app-acceuil-header>
+
+<div class="page-hero">
+  <div class="wrap page-hero-inner">
+    <div>
+      <h1 class="display-md" style="margin-bottom:4px">Mes favoris</h1>
+      <p class="body-sm">{{ favoriteArticles.length }} article(s) sauvegardé(s)</p>
+    </div>
+  </div>
+</div>
+
+<main class="page-container">
+
+  <!-- Loading -->
+  <div class="favorites-loading" *ngIf="loading">
+    <div class="loading-spinner"></div>
+    <p>Chargement de vos favoris...</p>
+  </div>
+
+  <!-- Articles grid -->
+  <div *ngIf="!loading && favoriteArticles.length > 0">
+    <div class="articles-grid">
+      <article class="article-card card card-hover" *ngFor="let article of favoriteArticles" (click)="goDetail(article.id)">
+        <div class="card-thumb">
+          <img *ngIf="article.images?.length" [src]="GetFirstImageUrl(article)" [alt]="article.title" loading="lazy">
+          <div class="card-thumb-placeholder" *ngIf="!article.images?.length">
+            <i class="fa-solid fa-shirt"></i>
+          </div>
+          <div class="card-status">
+            <span [class]="'badge badge-' + article.statut">{{ statusLabel(article.statut) }}</span>
+          </div>
+          <button class="card-fav-btn active" (click)="$event.stopPropagation(); removeArticle(article)" title="Retirer des favoris">
+            <i class="fa-solid fa-heart"></i>
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="label-xs" style="margin-bottom:3px">
+            {{ article.type }}<span *ngIf="article.sous_type"> · {{ article.sous_type }}</span>
+          </div>
+          <h3 class="card-title">{{ article.title }}</h3>
+          <div class="card-donor" (click)="$event.stopPropagation(); goProfile(article.user.id)">
+            <div class="avatar avatar-xs" [style.background]="avatarColor(article.user.id)">
+              {{ article.user.firstName[0] }}{{ article.user.lastName[0] }}
+            </div>
+            <span class="donor-name">{{ article.user.firstName }}</span>
+            <span class="donor-city">
+              <i class="fa-solid fa-location-dot"></i> {{ article.user.city }}
+            </span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div class="empty-state" *ngIf="!loading && favoriteArticles.length === 0">
+    <div class="empty-icon">💔</div>
+    <p>Vous n'avez pas encore de favoris.<br>Explorez les articles et cliquez sur ❤️ pour en sauvegarder.</p>
+    <a routerLink="/acceuil" class="btn btn-primary">
+      <i class="fa-solid fa-compass"></i> Explorer les articles
+    </a>
+  </div>
+
+</main>
+
+<app-footer></app-footer>

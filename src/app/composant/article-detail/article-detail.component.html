@@ -1,0 +1,141 @@
+<app-acceuil-header></app-acceuil-header>
+
+<main class="page-container" *ngIf="article; else loading">
+
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb">
+    <a routerLink="/acceuil"><i class="fa-solid fa-house"></i> Accueil</a>
+    <i class="fa-solid fa-chevron-right bc-sep"></i>
+    <span>{{ article.type }}</span>
+    <i class="fa-solid fa-chevron-right bc-sep"></i>
+    <span class="bc-current">{{ article.title }}</span>
+  </nav>
+
+  <div class="detail-layout">
+
+    <!-- ── GALLERY ───────────────────────────────────── -->
+    <div class="detail-gallery">
+      <div class="main-photo" [class.no-image]="!article.images?.length">
+        <img *ngIf="getCurrentImage()" [src]="getCurrentImage()!" [alt]="article.title" loading="eager">
+        <div class="photo-placeholder" *ngIf="!getCurrentImage()">
+          <i class="fa-solid fa-shirt"></i>
+        </div>
+
+        <!-- Nav arrows -->
+        <button class="pnav prev" *ngIf="article.images.length > 1" (click)="prevImage()">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <button class="pnav next" *ngIf="article.images.length > 1" (click)="nextImage()">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+
+        <!-- Counter -->
+        <div class="photo-counter" *ngIf="article.images.length > 1">
+          {{ currentIndex + 1 }} / {{ article.images.length }}
+        </div>
+
+        <!-- Status badge -->
+        <div class="photo-badge">
+          <span [class]="'badge badge-' + article.statut">{{ statusLabel(article.statut) }}</span>
+        </div>
+      </div>
+
+      <!-- Thumbnails -->
+      <div class="photo-strip" *ngIf="article.images.length > 1">
+        <div class="photo-thumb" *ngFor="let img of article.images; let i = index"
+          [class.active]="i === currentIndex" (click)="currentIndex = i">
+          <img [src]="resolveImg(img)" [alt]="'Photo ' + (i+1)">
+        </div>
+      </div>
+    </div>
+
+    <!-- ── INFO PANEL ─────────────────────────────────── -->
+    <div class="detail-info">
+
+      <!-- Category + title -->
+      <div class="detail-cat">
+        <span class="label-xs">{{ article.type }}</span>
+        <span class="label-xs detail-cat-sep">·</span>
+        <span class="label-xs" *ngIf="article.sous_type">{{ article.sous_type }}</span>
+      </div>
+      <h1 class="detail-title">{{ article.title }}</h1>
+
+      <div class="detail-location">
+        <i class="fa-solid fa-location-dot"></i>
+        {{ article.user.city }}
+      </div>
+
+      <!-- Description -->
+      <p class="detail-desc">{{ article.description }}</p>
+
+      <!-- Donor card -->
+      <div class="donor-card" [routerLink]="['/profil', article.user.id]">
+        <div class="donor-av avatar avatar-md" [style.background]="avatarColor(article.user.id)">
+          {{ article.user.firstName[0] }}{{ article.user.lastName[0] }}
+        </div>
+        <div class="donor-info">
+          <div class="donor-name">{{ article.user.firstName }} {{ article.user.lastName }}</div>
+          <div class="donor-sub">Voir le profil &rarr;</div>
+        </div>
+        <button class="fav-btn" [class.active]="isFavorite" (click)="$event.stopPropagation(); onHeartClick(article)">
+          <i [class]="isFavorite ? 'fa-solid fa-heart' : 'fa-regular fa-heart'"></i>
+        </button>
+      </div>
+
+      <!-- ── ACTIONS ──────────────────────────────────── -->
+      <div class="detail-actions" *ngIf="article.statut !== 'donné' && article.statut !== 'donne'">
+
+        <button class="action-btn primary" (click)="contacter()">
+          <i class="fa-regular fa-comment-dots"></i>
+          <div>
+            <div class="action-label">Contacter le donateur</div>
+            <div class="action-sub">Envoyer un message direct</div>
+          </div>
+        </button>
+
+        <button class="action-btn outline" (click)="homerequest()">
+          <i class="fa-solid fa-box"></i>
+          <div>
+            <div class="action-label">Demande à domicile</div>
+            <div class="action-sub">Livraison à votre adresse</div>
+          </div>
+        </button>
+
+        <button class="action-btn outline" (click)="asblrequest()">
+          <i class="fa-solid fa-building-ngo"></i>
+          <div>
+            <div class="action-label">Demande via ASBL</div>
+            <div class="action-sub">Pour une association</div>
+          </div>
+        </button>
+
+        <button class="action-btn ghost" *ngIf="adminId !== currentuserId" (click)="signaler()">
+          <i class="fa-regular fa-flag"></i>
+          <div>
+            <div class="action-label" style="color:var(--muted)">Signaler</div>
+          </div>
+        </button>
+      </div>
+
+      <!-- Given state -->
+      <div class="given-state" *ngIf="article.statut === 'donné' || article.statut === 'donne'">
+        <div class="given-icon"><i class="fa-solid fa-check-circle"></i></div>
+        <div>
+          <div style="font-weight:600;color:var(--brand)">Article donné</div>
+          <div class="body-sm">Cet article a trouvé son nouveau propriétaire.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<ng-template #loading>
+  <div class="empty-state" style="height:70vh">
+    <div class="loading-spinner"></div>
+    <p style="margin-top:12px">Chargement de l'article...</p>
+  </div>
+</ng-template>
+
+<app-footer></app-footer>

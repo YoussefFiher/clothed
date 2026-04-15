@@ -1,0 +1,20 @@
+<div class="dialog-container">
+  <div class="dialog-icon info">
+    <i class="fa-regular fa-comment-dots"></i>
+  </div>
+  <h2 class="dialog-title">Répondre au message</h2>
+  <p class="dialog-body">Votre réponse sera envoyée directement au demandeur.</p>
+  <form [formGroup]="responseForm">
+    <div class="form-group">
+      <label class="form-label">Votre message</label>
+      <textarea class="form-control" formControlName="responseContent" rows="4"
+        placeholder="Écrivez votre réponse ici..." style="min-height:100px"></textarea>
+    </div>
+    <div class="dialog-actions">
+      <button class="btn btn-secondary" type="button" (click)="onCancelClick()">Annuler</button>
+      <button class="btn btn-primary" type="button" (click)="onSendResponse()" [disabled]="responseForm.invalid">
+        <i class="fa-solid fa-paper-plane"></i> Envoyer
+      </button>
+    </div>
+  </form>
+</div>

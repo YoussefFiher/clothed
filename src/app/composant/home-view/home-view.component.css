@@ -1,0 +1,7 @@
+.lp-about{background:var(--surface)}
+.lp-about-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+.lp-about-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.lp-about-card{background:var(--paper);border:1px solid var(--border);border-radius:var(--r-xl);padding:24px 20px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;font-size:.85rem;font-weight:500;color:var(--ink-light);transition:var(--t-base)}
+.lp-about-card:hover{background:var(--brand-xs);border-color:var(--brand-lt);color:var(--brand)}
+.lp-about-card i{font-size:1.8rem;color:var(--brand)}
+@media(max-width:900px){.lp-about-grid{grid-template-columns:1fr}}

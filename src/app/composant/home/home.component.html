@@ -1,0 +1,98 @@
+<app-header></app-header>
+
+<!-- Hero -->
+<section class="lp-hero">
+  <div class="wrap lp-hero-inner">
+    <div class="lp-hero-content">
+      <div class="label-xs" style="color:var(--brand);margin-bottom:16px">
+        <i class="fa-solid fa-leaf"></i>&nbsp; Plateforme de don solidaire
+      </div>
+      <h1 class="display-xl" style="color:var(--ink);margin-bottom:20px">
+        Donnez une<br><em style="color:var(--brand);font-style:italic">seconde vie</em><br>à vos vêtements
+      </h1>
+      <p class="body-sm" style="font-size:.95rem;max-width:440px;margin-bottom:36px">
+        Rejoignez notre communauté et partagez vos articles inutilisés avec ceux qui en ont besoin. Gratuit, simple et humain.
+      </p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <a routerLink="/signup" class="btn btn-primary btn-lg">
+          Commencer gratuitement <i class="fa-solid fa-arrow-right"></i>
+        </a>
+        <a routerLink="/connexion" class="btn btn-secondary btn-lg">Se connecter</a>
+      </div>
+      <div class="lp-stats">
+        <div class="lp-stat"><div class="lp-stat-num">1 200+</div><div class="label-xs">Articles donnés</div></div>
+        <div class="lp-stat-div"></div>
+        <div class="lp-stat"><div class="lp-stat-num">580</div><div class="label-xs">Membres actifs</div></div>
+        <div class="lp-stat-div"></div>
+        <div class="lp-stat"><div class="lp-stat-num">100%</div><div class="label-xs">Gratuit</div></div>
+      </div>
+    </div>
+    <div class="lp-hero-visual">
+      <div class="lp-card-stack">
+        <div class="lp-mini-card" style="transform:rotate(-4deg) translate(-20px,10px)">
+          <div class="lp-mini-img"><i class="fa-solid fa-shirt"></i></div>
+          <div class="lp-mini-body"><div class="lp-mini-title">T-shirt vintage</div><div class="badge badge-libre">Disponible</div></div>
+        </div>
+        <div class="lp-mini-card" style="transform:rotate(2deg) translate(20px,-5px)">
+          <div class="lp-mini-img" style="background:var(--brand-lt)"><i class="fa-solid fa-socks" style="color:var(--brand)"></i></div>
+          <div class="lp-mini-body"><div class="lp-mini-title">Manteau d'hiver</div><div class="badge badge-libre">Disponible</div></div>
+        </div>
+        <div class="lp-mini-card" style="transform:rotate(-1deg)">
+          <div class="lp-mini-img" style="background:#fef3c7"><i class="fa-solid fa-book" style="color:#92400e"></i></div>
+          <div class="lp-mini-body"><div class="lp-mini-title">Roman policier</div><div class="badge badge-libre">Disponible</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Steps -->
+<section class="lp-steps section" id="about">
+  <div class="wrap">
+    <div style="text-align:center;margin-bottom:56px">
+      <div class="label-xs" style="margin-bottom:12px;color:var(--brand)">Simple & rapide</div>
+      <h2 class="display-md">Comment ça fonctionne ?</h2>
+    </div>
+    <div class="lp-steps-grid">
+      <div class="lp-step" *ngFor="let step of steps; let i = index">
+        <div class="lp-step-num">{{ i + 1 }}</div>
+        <div class="lp-step-icon"><i [class]="step.icon"></i></div>
+        <h3>{{ step.title }}</h3>
+        <p>{{ step.desc }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Services -->
+<section class="lp-services section" id="services" style="background:var(--paper)">
+  <div class="wrap">
+    <div style="text-align:center;margin-bottom:56px">
+      <div class="label-xs" style="margin-bottom:12px;color:var(--brand)">Ce que nous offrons</div>
+      <h2 class="display-md">Nos services</h2>
+    </div>
+    <div class="lp-services-grid">
+      <div class="lp-service-card" *ngFor="let s of services">
+        <div class="lp-service-icon"><i [class]="s.icon"></i></div>
+        <h3>{{ s.title }}</h3>
+        <p>{{ s.desc }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="lp-cta section">
+  <div class="wrap">
+    <div class="lp-cta-box">
+      <div class="label-xs" style="color:rgba(255,255,255,.7);margin-bottom:12px">Rejoignez-nous dès aujourd'hui</div>
+      <h2 class="display-md" style="color:#fff;margin-bottom:20px">Prêt à donner une seconde vie à vos affaires ?</h2>
+      <p style="color:rgba(255,255,255,.8);max-width:480px;margin:0 auto 32px">Inscription gratuite en moins de 2 minutes. Pas de carte bancaire requise.</p>
+      <a routerLink="/signup" class="btn btn-lg" style="background:#fff;color:var(--brand);border-color:#fff">
+        Créer mon compte gratuitement <i class="fa-solid fa-arrow-right"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<app-home-view></app-home-view>

@@ -1,0 +1,17 @@
+<section class="lp-about section">
+  <div class="wrap lp-about-grid">
+    <div>
+      <div class="label-xs" style="color:var(--brand);margin-bottom:14px">Notre histoire</div>
+      <h2 class="display-md" style="margin-bottom:20px">Une mode plus juste pour tous</h2>
+      <p class="body-sm" style="margin-bottom:16px">Chez <strong>Clothed</strong>, nous croyons que chaque vêtement mérite une seconde chance. Notre plateforme facilite les dons entre particuliers, permettant à ceux qui ont trop de donner à ceux qui ont besoin.</p>
+      <p class="body-sm" style="margin-bottom:32px">Nous promouvons la durabilité, la solidarité et l'entraide, en transformant des gestes simples en un impact positif pour la planète.</p>
+      <a routerLink="/signup" class="btn btn-primary">Rejoindre la communauté</a>
+    </div>
+    <div class="lp-about-cards">
+      <div class="lp-about-card" *ngFor="let c of categories">
+        <i [class]="c.icon"></i><span>{{ c.label }}</span>
+      </div>
+    </div>
+  </div>
+</section>
+<app-footer></app-footer>

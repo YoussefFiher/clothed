@@ -1,0 +1,12 @@
+.dialog-container { padding: 8px; min-width: 340px; }
+.dialog-icon {
+  width: 52px; height: 52px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; margin-bottom: 16px;
+}
+.dialog-icon.danger { background: #fef2f2; color: var(--danger); }
+.dialog-title { font-family: var(--font-serif); font-size: 1.3rem; font-weight: 400; margin-bottom: 8px; color: var(--ink); }
+.dialog-body { font-size: .9rem; color: var(--muted); line-height: 1.6; margin-bottom: 8px; }
+.dialog-body strong { color: var(--ink); }
+.success-msg { display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: var(--brand-xs); color: var(--brand); border-radius: var(--r-md); font-size: .85rem; margin-bottom: 8px; }
+.dialog-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }

@@ -1,0 +1,73 @@
+<div class="auth-page">
+  <!-- Left visual -->
+  <div class="auth-visual">
+    <a class="auth-brand" routerLink="/">
+      <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+        <path d="M14 2C8.48 2 4 6.48 4 12c0 3.6 1.84 6.77 4.64 8.66L14 26l5.36-5.34C22.16 18.77 24 15.6 24 12c0-5.52-4.48-10-10-10z" fill="#fff"/>
+      </svg>
+      Clothed
+    </a>
+    <div class="auth-visual-body">
+      <h2 class="auth-visual-title">Confirmez votre adresse e-mail</h2>
+      <p class="auth-visual-sub">Un code de 6 chiffres a été envoyé à votre adresse e-mail. Entrez-le ci-dessous pour activer votre compte.</p>
+      <div class="auth-steps">
+        <div class="auth-step done"><div class="step-num">1</div><span>Inscription</span></div>
+        <div class="auth-step-line done"></div>
+        <div class="auth-step active"><div class="step-num">2</div><span>Confirmation</span></div>
+        <div class="auth-step-line"></div>
+        <div class="auth-step"><div class="step-num">3</div><span>Connexion</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right form -->
+  <div class="auth-form-side">
+    <div class="auth-form-box">
+      <div class="confirm-icon-wrap">
+        <i class="fa-regular fa-envelope-open-text"></i>
+      </div>
+
+      <h1 class="auth-form-title">Vérifiez votre e-mail</h1>
+      <p class="body-sm" style="margin-bottom:28px">
+        Code envoyé à <strong>{{ email }}</strong><br>
+        <span style="font-size:.8rem;color:var(--ghost)">Vérifiez votre boîte de réception et vos spams.</span>
+      </p>
+
+      <!-- Success state -->
+      <div class="confirm-success" *ngIf="confirmmsg">
+        <i class="fa-solid fa-circle-check"></i>
+        <div>
+          <div style="font-weight:700;font-size:1rem">Compte confirmé !</div>
+          <div class="body-sm">Redirection vers la connexion...</div>
+        </div>
+      </div>
+
+      <!-- Error -->
+      <div class="alert alert-error" *ngIf="errmsg">
+        <i class="fa-solid fa-circle-exclamation"></i> {{ errmsg }}
+      </div>
+
+      <!-- Code input -->
+      <div *ngIf="!confirmmsg">
+        <div class="code-input-wrap">
+          <input class="form-control code-field" type="text"
+            #confirmationCodeInput
+            maxlength="8"
+            placeholder="XXXXXXXX"
+            autocomplete="one-time-code">
+        </div>
+        <button class="btn btn-primary" style="width:100%;height:46px;margin-top:16px;font-size:.95rem" (click)="onSubmitConfirmation()">
+          <i class="fa-solid fa-check"></i> Confirmer mon compte
+        </button>
+        <div class="resend-row">
+          <span>Vous n'avez pas reçu le code ?</span>
+          <button class="resend-btn" (click)="resend()">Renvoyer</button>
+        </div>
+      </div>
+
+      <p class="auth-footer-link">
+        Déjà confirmé ? <a routerLink="/connexion">Se connecter</a>
+      </p>
+    </div>
+  </div>
+</div>

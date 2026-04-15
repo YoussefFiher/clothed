@@ -1,0 +1,52 @@
+.auth-visual-title { font-family:var(--font-serif); font-size:1.8rem; font-weight:300; color:#fff; line-height:1.2; margin-bottom:14px; }
+.auth-visual-sub { color:rgba(255,255,255,.75); line-height:1.7; font-size:.9rem; margin-bottom:36px; }
+
+/* Steps indicator */
+.auth-steps { display:flex; align-items:center; gap:0; }
+.auth-step { display:flex; flex-direction:column; align-items:center; gap:6px; }
+.step-num {
+  width:32px; height:32px; border-radius:50%;
+  background:rgba(255,255,255,.2); color:rgba(255,255,255,.7);
+  display:flex; align-items:center; justify-content:center;
+  font-size:.8rem; font-weight:700; transition:var(--t-base);
+}
+.auth-step span { font-size:.72rem; color:rgba(255,255,255,.6); white-space:nowrap; }
+.auth-step.done .step-num  { background:rgba(255,255,255,.9); color:var(--brand); }
+.auth-step.done span { color:rgba(255,255,255,.9); }
+.auth-step.active .step-num { background:#fff; color:var(--brand); box-shadow:0 0 0 3px rgba(255,255,255,.3); }
+.auth-step.active span { color:#fff; font-weight:600; }
+.auth-step-line { flex:1; height:2px; background:rgba(255,255,255,.2); margin:0 8px; margin-bottom:20px; }
+.auth-step-line.done { background:rgba(255,255,255,.7); }
+
+/* Icon */
+.confirm-icon-wrap {
+  width:64px; height:64px; border-radius:16px;
+  background:var(--brand-xs); display:flex; align-items:center; justify-content:center;
+  margin-bottom:20px;
+}
+.confirm-icon-wrap i { font-size:1.6rem; color:var(--brand); }
+
+/* Code input */
+.code-input-wrap { margin-top:4px; }
+.code-field {
+  text-align:center; letter-spacing:.4em; font-size:1.4rem;
+  font-weight:700; height:60px; border-radius:var(--r-lg);
+  border:2px solid var(--border); background:var(--paper);
+}
+.code-field:focus { border-color:var(--brand); background:#fff; box-shadow:0 0 0 3px rgba(22,163,74,.12); letter-spacing:.4em; }
+
+/* Success */
+.confirm-success {
+  display:flex; align-items:center; gap:16px;
+  padding:20px; background:var(--brand-xs);
+  border:1px solid var(--brand-lt); border-radius:var(--r-xl); margin-bottom:20px;
+}
+.confirm-success i { font-size:2rem; color:var(--brand); }
+
+/* Resend */
+.resend-row { display:flex; align-items:center; justify-content:center; gap:8px; margin-top:14px; font-size:.82rem; color:var(--muted); }
+.resend-btn { background:none; color:var(--brand); font-size:.82rem; font-weight:600; cursor:pointer; text-decoration:underline; }
+
+/* Footer */
+.auth-footer-link { text-align:center; margin-top:24px; font-size:.875rem; color:var(--muted); }
+.auth-footer-link a { color:var(--brand); font-weight:500; }

@@ -1,0 +1,89 @@
+<div class="msg-dlg">
+
+  <!-- Background decoration -->
+  <div class="msg-dlg-bg" [class.signaler]="data.requestType === 'signaler'"></div>
+
+  <!-- Close button -->
+  <button class="msg-dlg-close" (click)="onCancelClick()">
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+
+  <!-- Article image banner -->
+  <div class="msg-dlg-banner" *ngIf="data.articleImage">
+    <img [src]="data.articleImage" [alt]="data.articleTitle">
+    <div class="msg-dlg-banner-overlay"></div>
+    <div class="msg-dlg-banner-content">
+      <span class="msg-dlg-banner-label">{{ data.requestType === 'signaler' ? 'Signaler' : 'Contacter pour' }}</span>
+      <span class="msg-dlg-banner-title">{{ data.articleTitle }}</span>
+    </div>
+  </div>
+
+  <div class="msg-dlg-body">
+
+    <!-- Header (no image) -->
+    <div class="msg-dlg-header" *ngIf="!data.articleImage">
+      <div class="msg-dlg-avatar" [class.warn]="data.requestType === 'signaler'">
+        <i [class]="data.requestType === 'signaler' ? 'fa-solid fa-flag' : 'fa-regular fa-comment-dots'"></i>
+      </div>
+      <div>
+        <h2 class="msg-dlg-title">
+          {{ data.requestType === 'signaler' ? 'Signaler cet article' : 'Contacter le donateur' }}
+        </h2>
+        <p class="msg-dlg-sub">{{ data.receiverName }}</p>
+      </div>
+    </div>
+
+    <!-- Donor chip -->
+    <div class="msg-dlg-donor" *ngIf="data.requestType !== 'signaler'">
+      <div class="donor-chip">
+        <div class="donor-chip-av">{{ data.receiverName?.[0] || '?' }}</div>
+        <div>
+          <div class="donor-chip-name">{{ data.receiverName }}</div>
+          <div class="donor-chip-role">Donateur · Répond généralement vite</div>
+        </div>
+        <div class="donor-chip-dot"></div>
+      </div>
+    </div>
+
+    <!-- Suggestions rapides -->
+    <div class="msg-quick-replies" *ngIf="data.requestType !== 'signaler'">
+      <span class="quick-label">Suggestion :</span>
+      <button class="quick-btn" *ngFor="let s of quickSuggestions" (click)="useSuggestion(s)">{{ s }}</button>
+    </div>
+
+    <!-- Textarea -->
+    <form [formGroup]="messageForm" (ngSubmit)="onSendMessage()">
+      <div class="msg-dlg-input-wrap">
+        <textarea class="msg-dlg-textarea" formControlName="content"
+          [placeholder]="data.requestType === 'signaler'
+            ? 'Décrivez le problème (contenu inapproprié, fausse annonce...)...'
+            : 'Bonjour, je suis très intéressé(e) par votre article. Est-il toujours disponible ?'"
+          rows="4" #textareaEl
+          (input)="updateCount()"></textarea>
+        <div class="msg-char-count" [class.warn]="charCount > 250">{{ charCount }}/300</div>
+      </div>
+
+      <div class="msg-dlg-footer">
+        <div class="msg-dlg-tip" *ngIf="data.requestType !== 'signaler'">
+          <i class="fa-solid fa-circle-info"></i>
+          Soyez poli et précis pour augmenter vos chances
+        </div>
+        <div class="msg-dlg-tip warn" *ngIf="data.requestType === 'signaler'">
+          <i class="fa-solid fa-shield-halved"></i>
+          Votre signalement sera examiné par un modérateur
+        </div>
+
+        <div class="msg-dlg-actions">
+          <button type="button" class="btn btn-secondary btn-sm" (click)="onCancelClick()">Annuler</button>
+          <button type="submit" class="btn btn-sm send-btn"
+            [class.danger-btn]="data.requestType === 'signaler'"
+            [disabled]="messageForm.invalid">
+            <i [class]="data.requestType === 'signaler' ? 'fa-solid fa-flag' : 'fa-solid fa-paper-plane'"></i>
+            {{ data.requestType === 'signaler' ? 'Envoyer le signalement' : 'Envoyer le message' }}
+          </button>
+        </div>
+      </div>
+    </form>
+
+  </div>
+</div>
